@@ -10,9 +10,14 @@ export function assertRequired<T extends object>(obj: T): asserts obj is
 declare global {
     interface Array<T> {
         sum(): number
+        prod(): number
     }
 }
 
-Array.prototype.sum = function() {
+Array.prototype.sum = function () {
     return this.reduce((t, x) => t + x, 0)
+}
+
+Array.prototype.prod = function () {
+    return this.reduce((t, x) => t * x)
 }

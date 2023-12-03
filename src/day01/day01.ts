@@ -1,14 +1,18 @@
 import { main } from "../main"
 import { assertRequired } from "../util"
 
-type DigitFinder = (line: string) => { first: string, last: string }
+type Instruction = { first: string, last: string }
 
-function solver(digitFinder: DigitFinder) {
-    return (input: string[]) => input
-        .map(digitFinder)
+function solver(input: string[]) {
+    const answer = (ds: Instruction[]) => ds
         .map(({ first, last }) => 10 * parseInt(first) + parseInt(last))
         .sum()
         .toString()
+
+    return [
+        answer(input.map(part1)),
+        answer(input.map(part2))
+    ]
 }
 
 function part1(line: string) {
@@ -43,4 +47,4 @@ function part2(line: string) {
     return digits
 }
 
-main(solver(part1), solver(part2))
+main(solver)
