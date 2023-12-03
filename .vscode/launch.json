@@ -17,9 +17,16 @@
             ],
             "preLaunchTask": "${defaultBuildTask}",
             "args": [
-                "${fileDirname}/input.txt"
+                "${fileDirname}/${input:inputFile}"
             ],
-            "internalConsoleOptions": "openOnSessionStart"
+            "internalConsoleOptions": "openOnSessionStart",
         }
-    ]
+    ],
+    "inputs": [{
+        "id": "inputFile",
+        "type": "pickString",
+        "default": "input.txt",
+        "options": ["input.txt", "sample.txt"],
+        "description": "Input file"
+    }]
 }

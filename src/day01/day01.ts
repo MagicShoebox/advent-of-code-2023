@@ -1,5 +1,46 @@
-function main(): void {
-    console.log(process.argv[2])
+import { main } from "../main"
+import { assertRequired } from "../util"
+
+type DigitFinder = (line: string) => { first: string, last: string }
+
+function solver(digitFinder: DigitFinder) {
+    return (input: string[]) => input
+        .map(digitFinder)
+        .map(({ first, last }) => 10 * parseInt(first) + parseInt(last))
+        .sum()
+        .toString()
 }
 
-main()
+function part1(line: string) {
+    const digits = {
+        first: line.match(/^.*?(\d)/)?.[1],
+        last: line.match(/.*(\d).*?$/)?.[1]
+    }
+    assertRequired(digits)
+    return digits
+}
+
+function part2(line: string) {
+    const lexical = new Map([
+        ["one", "1"],
+        ["two", "2"],
+        ["three", "3"],
+        ["four", "4"],
+        ["five", "5"],
+        ["six", "6"],
+        ["seven", "7"],
+        ["eight", "8"],
+        ["nine", "9"]
+    ])
+    const letters = [...lexical.keys()].join("|")
+    const digits = {
+        first: line.match(`^.*?(\\d|${letters})`)?.[1],
+        last: line.match(`.*(\\d|${letters}).*?$`)?.[1]
+    }
+    assertRequired(digits)
+    digits.first = lexical.get(digits.first) ?? digits.first
+    digits.last = lexical.get(digits.last) ?? digits.last
+    return digits
+}
+
+main(solver(part1), solver(part2))
