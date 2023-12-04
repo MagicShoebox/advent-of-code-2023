@@ -1,5 +1,5 @@
 import { main } from "../main"
-import { assertRequired } from "../util"
+import { assertRequired, sum, prod } from "../util"
 
 const colors = ["red", "green", "blue"] as const
 type Color = typeof colors[number]
@@ -25,7 +25,7 @@ function part1(games: Game[]) {
     return games
         .filter(gameValid)
         .map(game => game.id)
-        .sum()
+        .reduce(sum)
         .toString()
 }
 
@@ -33,8 +33,8 @@ function part2(games: Game[]) {
     return games.map(({ sets }) =>
         colors
             .map(c => Math.max(...sets.map(s => s[c])))
-            .prod())
-        .sum()
+            .reduce(prod))
+        .reduce(sum)
         .toString()
 }
 

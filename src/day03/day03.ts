@@ -1,5 +1,5 @@
 import { main } from "../main"
-import { partition, range } from "../util"
+import { partition, range, sum, prod } from "../util"
 
 type Part = {
     y: number,
@@ -38,7 +38,7 @@ function solver(input: string[]) {
     const part1 = numbers
         .filter(hasSymbolNeighbor)
         .map(partNo)
-        .sum()
+        .reduce(sum)
         .toString()
 
     const gearParts = partition(
@@ -50,8 +50,8 @@ function solver(input: string[]) {
     const part2 =
         [...gearParts.values()]
             .filter(ns => ns.length == 2)
-            .map(ns => ns.map(n => n.part).prod())
-            .sum()
+            .map(ns => ns.map(n => n.part).reduce(prod))
+            .reduce(sum)
             .toString()
 
     return [

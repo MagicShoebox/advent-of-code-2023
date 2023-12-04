@@ -1,12 +1,12 @@
 import { main } from "../main"
-import { assertRequired } from "../util"
+import { assertRequired, sum } from "../util"
 
 type Instruction = { first: string, last: string }
 
 function solver(input: string[]) {
     const answer = (ds: Instruction[]) => ds
         .map(({ first, last }) => 10 * parseInt(first) + parseInt(last))
-        .sum()
+        .reduce(sum)
         .toString()
 
     return [

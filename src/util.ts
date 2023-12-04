@@ -32,17 +32,10 @@ export function partition<T, K>(f: (arg0: T) => K, xs: T[]) {
     }, new Map<K, T[]>())
 }
 
-declare global {
-    interface Array<T> {
-        sum(): number
-        prod(): number
-    }
+export function sum(t: number, x: number) {
+    return t + x
 }
 
-Array.prototype.sum = function () {
-    return this.reduce((t, x) => t + x, 0)
-}
-
-Array.prototype.prod = function () {
-    return this.reduce((t, x) => t * x)
+export function prod(t: number, x: number) {
+    return t * x
 }
