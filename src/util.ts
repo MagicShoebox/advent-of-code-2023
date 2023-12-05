@@ -21,15 +21,43 @@ export function* range(start: number, stop?: number, step?: number) {
 }
 
 // https://stackoverflow.com/a/38863774
-export function partition<T, K>(f: (arg0: T) => K, xs: T[]) {
+export function partition<T, K>(f: (value: T, index: number) => K, xs: T[]) {
     const append = function (ys: T[] = [], y: T) {
         ys.push(y)
         return ys
     }
-    return xs.reduce((m, x) => {
-        let v = f(x)
+    return xs.reduce((m, x, i) => {
+        let v = f(x, i)
         return m.set(v, append(m.get(v), x))
     }, new Map<K, T[]>())
+}
+
+export function* takewhile<T>(
+    itr: Iterable<T> | Iterator<T>,
+    predicate: (value: T, index: number, iterable: Iterator<T>) => boolean) {
+    if (Symbol.iterator in itr)
+        itr = itr[Symbol.iterator]()
+    let index = 0
+    let next = itr.next()
+    while (!next.done && predicate(next.value, index, itr)) {
+        yield next.value
+        index++
+        next = itr.next()
+    }
+}
+
+export function* map<T, U>(
+    itr: Iterable<T> | Iterator<T>,
+    callback: (value: T, index: number, iterable: Iterator<T>) => U) {
+    if (Symbol.iterator in itr)
+        itr = itr[Symbol.iterator]()
+    let index = 0
+    let next = itr.next()
+    while (!next.done) {
+        yield callback(next.value, index, itr)
+        index++
+        next = itr.next()
+    }
 }
 
 export function sum(t: number, x: number) {
