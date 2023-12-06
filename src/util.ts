@@ -60,6 +60,16 @@ export function* map<T, U>(
     }
 }
 
+// https://stackoverflow.com/a/48293566/3491874
+export function* zip<T>(...arr: Array<Iterable<T>>) {
+    const itrs = arr.map(itr => itr[Symbol.iterator]())
+    let next = itrs.map(itr => itr.next())
+    while (next.every(n => !n.done)) {
+        yield next.map(n => n.value)
+        next = itrs.map(itr => itr.next())
+    }
+}
+
 export function sum(t: number, x: number) {
     return t + x
 }
