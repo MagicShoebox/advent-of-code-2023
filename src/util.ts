@@ -77,3 +77,9 @@ export function sum(t: number, x: number) {
 export function prod(t: number, x: number) {
     return t * x
 }
+
+export function gcd(a: number, b: number) {
+    while (b != 0)
+        [a, b] = [b, a % b]
+    return a
+}
