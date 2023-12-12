@@ -60,6 +60,21 @@ export function* map<T, U>(
     }
 }
 
+export function* filter<T>(
+    itr: Iterable<T> | Iterator<T>,
+    predicate: (value: T, index: number, iterable: Iterator<T>) => boolean) {
+    if (Symbol.iterator in itr)
+        itr = itr[Symbol.iterator]()
+    let index = 0
+    let next = itr.next()
+    while (!next.done) {
+        if (predicate(next.value, index, itr))
+            yield next.value
+        index++
+        next = itr.next()
+    }
+}
+
 // https://stackoverflow.com/a/48293566/3491874
 export function* zip<T>(...arr: Array<Iterable<T>>) {
     const itrs = arr.map(itr => itr[Symbol.iterator]())
