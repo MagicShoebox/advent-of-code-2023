@@ -85,6 +85,22 @@ export function* zip<T>(...arr: Array<Iterable<T>>) {
     }
 }
 
+export function every<T>(
+    itr: Iterable<T> | Iterator<T>,
+    predicate: (value: T, index: number, iterable: Iterator<T>) => boolean) {
+    if (Symbol.iterator in itr)
+        itr = itr[Symbol.iterator]()
+    let index = 0
+    let next = itr.next()
+    while (!next.done) {
+        if (!predicate(next.value, index, itr))
+            return false
+        index++
+        next = itr.next()
+    }
+    return true
+}
+
 export function sum(t: number, x: number) {
     return t + x
 }
