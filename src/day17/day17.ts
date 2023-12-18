@@ -1,5 +1,6 @@
 import { main } from "../main"
-import { Heap, sum } from "../util"
+import { sum } from "../util"
+import { Heap } from "../heap"
 
 enum Direction {
     North = 0,
@@ -28,12 +29,11 @@ function solver(input: string[]) {
 }
 
 function shortestPath(grid: number[][], neighbors: Neighbors) {
-    const heap = Heap<{ score: number, node: Node }>(({ score }) => score)
     const visited = new Map<string, { loss: number, prev: Node }>()
     const start = { row: 0, column: 0, loss: 0, blocks: 0, direction: Direction.North }
-    const queue = [{ score: 0, node: start }]
-    while (queue.length > 0) {
-        const { node } = heap.pop(queue)
+    const heap = Heap.heapify([{ score: 0, node: start }], (({ score: a }, { score: b }) => a - b))
+    while (heap.size > 0) {
+        const { node } = heap.pop()!
         if (node.row == grid.length - 1 && node.column == grid[0].length - 1)
             return node.loss
         for (let nghbr of neighbors(grid, node)) {
@@ -42,9 +42,8 @@ function shortestPath(grid: number[][], neighbors: Neighbors) {
             }
             visited.set(key(nghbr), { loss: nghbr.loss, prev: node })
             const score = nghbr.loss + grid.length - 1 - nghbr.row + grid[0].length - 1 - nghbr.column
-            heap.push(queue, { score, node: nghbr })
+            heap.push({ score, node: nghbr })
         }
-        // queue.sort(({ score: a }, { score: b }) => b - a)
     }
     throw new Error("No path")
 }
